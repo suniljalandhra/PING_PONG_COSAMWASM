@@ -3,6 +3,8 @@ use cosmwasm_std::entry_point;
 use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, StdError};
 use cw2::set_contract_version;
 use cosmwasm_std::{Uint64};
+use std::ops::Add;
+use cosmwasm_std::attr;
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
@@ -36,13 +38,13 @@ pub fn execute(
     match msg {
         ExecuteMsg::Ping {} => {
           let _: Result<Uint64, StdError> =   PING_COUNT.update(deps.storage, |exists:Uint64| {
-            count = exists.add(Uint64::from(1u8));
+            count = exists.add(Uint64::from(1));
             Ok(count)
             });
             let mut res = Response::new();
             res.attributes.push(attr("ping_count", count));
             res.data = Some(to_binary("pong")?);
-            Ok(res)
+            Ok(res);
 
         }
     }
